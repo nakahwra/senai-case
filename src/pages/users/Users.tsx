@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { PageContainer, Spinner, Table } from "../../components";
 import { api } from "../../services/api";
 import { queryClient } from "../../services/queryClient";
+import { handleDelete } from "../../utils/handleDelete";
 
 type User = {
   id: number;
@@ -34,14 +35,6 @@ function Users() {
       },
     }
   );
-
-  const handleDelete = async (id: number) => {
-    const shouldDelete = confirm(
-      "Tem certeza que deseja excluir este usuário?"
-    );
-
-    if (shouldDelete) await deleteUser.mutateAsync(id);
-  };
 
   return (
     <PageContainer
@@ -87,7 +80,7 @@ function Users() {
                     <div
                       className="px-4 py-3 transition-colors duration-150 cursor-pointer hover:text-red-600"
                       onClick={() => {
-                        handleDelete(user.id);
+                        handleDelete(user.id, deleteUser);
                       }}
                     >
                       <FaTrash />

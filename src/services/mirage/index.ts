@@ -77,9 +77,9 @@ export function makeServer() {
       this.del("/user/:id");
 
       this.get("/monitoring");
-      // this.get("/monitoring/:id");
-      // this.post("/monitoring");
-      // this.del("/monitoring/:id");
+      this.get("/monitoring/:id");
+      this.post("/monitoring");
+      this.del("/monitoring/:id");
     },
   });
 

@@ -1,8 +1,10 @@
 import { FaPencilAlt, FaPlus, FaTrash } from "react-icons/fa";
-import { useQuery } from "react-query";
+import { useMutation, useQuery } from "react-query";
 import { Link } from "react-router-dom";
 import { PageContainer, Spinner, Table } from "../../components";
 import { api } from "../../services/api";
+import { queryClient } from "../../services/queryClient";
+import { handleDelete } from "../../utils/handleDelete";
 
 type Environment = {
   id: number;
@@ -15,13 +17,25 @@ function Environments() {
   const { data, isLoading, error } = useQuery("monitoring", async () => {
     try {
       const { data } = await api.get("/monitoring");
-      console.log("data", data);
-
       return data.monitorings;
     } catch (err) {
       console.error(err);
     }
   });
+
+  const deleteEnvironment = useMutation(
+    async (id: number) => {
+      const response = await api.delete(`/monitoring/${id}`);
+    },
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries("monitoring");
+      },
+      onError: (err) => {
+        console.error(err.message);
+      },
+    }
+  );
 
   return (
     <PageContainer
@@ -72,9 +86,9 @@ function Environments() {
 
                       <div
                         className="px-4 py-3 transition-colors duration-150 cursor-pointer hover:text-red-600"
-                        // onClick={() => {
-                        //   handleDelete(user.id);
-                        // }}
+                        onClick={() => {
+                          handleDelete(monitoring.id, deleteEnvironment);
+                        }}
                       >
                         <FaTrash />
                       </div>
