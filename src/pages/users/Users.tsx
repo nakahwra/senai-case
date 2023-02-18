@@ -73,7 +73,9 @@ function Users() {
                     <td className="px-6 py-4">{user.username}</td>
                     <td className="px-6 py-4">{user.email}</td>
                     <td className="flex justify-end px-6 py-4">
-                      <FaPencilAlt />
+                      <Link to={`${user.id}`}>
+                        <FaPencilAlt />
+                      </Link>
                     </td>
                   </tr>
                 ))}

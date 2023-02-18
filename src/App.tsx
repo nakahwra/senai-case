@@ -9,6 +9,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/users" element={<Users />} />
           <Route path="/users/create" element={<EditUser />} />
+          <Route path="/users/:id" element={<EditUser edit />} />
         </Routes>
       </Router>
     </div>

@@ -31,6 +31,7 @@ export function makeServer() {
       this.timing = 750;
 
       this.get("/user");
+      this.get("/user/:id");
       this.post("/user");
     },
   });
