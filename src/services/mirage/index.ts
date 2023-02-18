@@ -8,8 +8,9 @@ type User = {
 };
 
 type Environment = {
+  id: number;
   name: string;
-  macAddresses: string[];
+  mac_addresses: string[];
   classes: string[];
 };
 
@@ -21,7 +22,7 @@ export function makeServer() {
 
     models: {
       user: Model.extend<Partial<User>>({}),
-      environment: Model.extend<Partial<Environment>>({}),
+      monitoring: Model.extend<Partial<Environment>>({}),
     },
 
     factories: {
@@ -30,7 +31,7 @@ export function makeServer() {
           return i + 1000;
         },
         username(i: number) {
-          return `João Pedro ${i + 1}`;
+          return `João Ianky ${i + 1}`;
         },
         email(i: number) {
           return `jp${i + 1}@email.com`;
@@ -40,12 +41,20 @@ export function makeServer() {
         },
       }),
 
-      environment: Factory.extend({
+      monitoring: Factory.extend({
+        id(i: number) {
+          return i + 100;
+        },
         name(i: number) {
           return `Environment ${i + 1}`;
         },
         macAddresses() {
-          return ["00:00:00:00:00:00"];
+          return [
+            "b8:57:df:64:0b:41",
+            "0e:92:8d:f5:54:89",
+            "4e:f8:23:06:48:2b",
+            "16:c2:03:a0:16:9f",
+          ];
         },
         classes() {
           return ["Capacete", "Óculos", "Protetor auricular"];
@@ -55,7 +64,7 @@ export function makeServer() {
 
     seeds(server) {
       server.createList("user", 5);
-      server.createList("environment", 5);
+      server.createList("monitoring", 5);
     },
 
     routes() {
@@ -66,6 +75,11 @@ export function makeServer() {
       this.get("/user/:id");
       this.post("/user");
       this.del("/user/:id");
+
+      this.get("/monitoring");
+      // this.get("/monitoring/:id");
+      // this.post("/monitoring");
+      // this.del("/monitoring/:id");
     },
   });
 
