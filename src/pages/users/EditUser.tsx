@@ -122,6 +122,7 @@ function EditUser({ edit = false }: EditUserProps) {
               value={inputs.password || ""}
               onChange={handleChange}
               required
+              min={6}
             />
             <input
               className="mt-8 w-full px-4 py-2 bg-indigo-600 font-semibold transition-colors duration-150 hover:bg-indigo-700 rounded-md sm:max-w-[150px] cursor-pointer"
