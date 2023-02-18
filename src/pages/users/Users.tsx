@@ -1,8 +1,9 @@
-import { FaPencilAlt, FaPlus } from "react-icons/fa";
-import { useQuery } from "react-query";
+import { FaPencilAlt, FaPlus, FaTrash } from "react-icons/fa";
+import { useMutation, useQuery } from "react-query";
 import { Link } from "react-router-dom";
 import { Spinner } from "../../components";
 import { api } from "../../services/api";
+import { queryClient } from "../../services/queryClient";
 
 type User = {
   id: number;
@@ -20,6 +21,28 @@ function Users() {
     }
   });
 
+  const deleteUser = useMutation(
+    async (id: number) => {
+      const response = await api.delete(`/user/${id}`);
+    },
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries("users");
+      },
+      onError: (err) => {
+        console.error(err.message);
+      },
+    }
+  );
+
+  const handleDelete = async (id: number) => {
+    const shouldDelete = confirm(
+      "Tem certeza que deseja excluir este usuário?"
+    );
+
+    if (shouldDelete) await deleteUser.mutateAsync(id);
+  };
+
   return (
     <div className="max-w-screen-xl p-8 m-auto">
       <div className="flex justify-between">
@@ -34,10 +57,11 @@ function Users() {
       </div>
       <div
         className={`${
-          (isLoading || error) && "flex justify-center items-center"
+          (isLoading || deleteUser.isLoading || error) &&
+          "flex justify-center items-center"
         } bg-slate-800 rounded-xl min-h-[250px] mt-8 p-8`}
       >
-        {isLoading ? (
+        {isLoading || deleteUser.isLoading ? (
           <Spinner />
         ) : error ? (
           <p className="font-semibold text-red-500">Error fetching users</p>
@@ -70,8 +94,8 @@ function Users() {
                     >
                       {user.id}
                     </td>
-                    <td className="">{user.username}</td>
-                    <td className="">{user.email}</td>
+                    <td>{user.username}</td>
+                    <td>{user.email}</td>
                     <td className="flex justify-end">
                       <Link
                         to={`${user.id}`}
@@ -79,6 +103,15 @@ function Users() {
                       >
                         <FaPencilAlt />
                       </Link>
+
+                      <div
+                        className="px-6 py-4 transition-colors duration-150 cursor-pointer hover:text-indigo-600"
+                        onClick={() => {
+                          handleDelete(user.id);
+                        }}
+                      >
+                        <FaTrash />
+                      </div>
                     </td>
                   </tr>
                 ))}

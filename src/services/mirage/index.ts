@@ -33,6 +33,7 @@ export function makeServer() {
       this.get("/user");
       this.get("/user/:id");
       this.post("/user");
+      this.del("/user/:id");
     },
   });
 
