@@ -1,7 +1,7 @@
 import { FaPencilAlt, FaPlus, FaTrash } from "react-icons/fa";
 import { useMutation, useQuery } from "react-query";
 import { Link } from "react-router-dom";
-import { Spinner } from "../../components";
+import { PageContainer, Spinner } from "../../components";
 import { api } from "../../services/api";
 import { queryClient } from "../../services/queryClient";
 
@@ -44,17 +44,12 @@ function Users() {
   };
 
   return (
-    <div className="max-w-screen-xl p-8 m-auto">
-      <div className="flex justify-between">
-        <h1 className="text-2xl font-semibold">Usuários</h1>
-        <Link
-          to={"/users/create"}
-          className="flex items-center px-4 py-2 transition-colors duration-150 bg-indigo-600 rounded-lg hover:bg-indigo-700"
-        >
-          <FaPlus size={14} />
-          <span className="ml-2 font-bold">Criar usuário</span>
-        </Link>
-      </div>
+    <PageContainer
+      title="Usuários"
+      buttonText="Criar usuário"
+      redirectPath="/users/create"
+      icon={<FaPlus size={14} />}
+    >
       <div
         className={`${
           (isLoading || deleteUser.isLoading || error) &&
@@ -120,7 +115,7 @@ function Users() {
           </div>
         )}
       </div>
-    </div>
+    </PageContainer>
   );
 }
 

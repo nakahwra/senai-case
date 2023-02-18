@@ -2,7 +2,7 @@ import { AxiosError } from "axios";
 import React, { useEffect, useState } from "react";
 import { useMutation, useQuery } from "react-query";
 import { useNavigate, useParams } from "react-router-dom";
-import { FormControl, Spinner } from "../../components";
+import { FormControl, PageContainer, Spinner } from "../../components";
 import { api } from "../../services/api";
 import { queryClient } from "../../services/queryClient";
 
@@ -84,10 +84,7 @@ function EditUser({ edit = false }: EditUserProps) {
   }, [data]);
 
   return (
-    <div className="max-w-screen-xl p-8 m-auto">
-      <h1 className="text-2xl font-semibold min-h-[40px]">
-        {edit ? `Editar usuário: ${id}` : "Criar usuário"}
-      </h1>
+    <PageContainer title={edit ? `Editar usuário: ${id}` : "Criar usuário"}>
       <div
         className={`${
           isLoading && "flex items-center justify-center w-full h-full"
@@ -132,7 +129,7 @@ function EditUser({ edit = false }: EditUserProps) {
           </form>
         )}
       </div>
-    </div>
+    </PageContainer>
   );
 }
 
