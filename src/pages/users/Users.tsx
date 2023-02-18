@@ -1,7 +1,7 @@
 import { FaPencilAlt, FaPlus, FaTrash } from "react-icons/fa";
 import { useMutation, useQuery } from "react-query";
 import { Link } from "react-router-dom";
-import { PageContainer, Spinner } from "../../components";
+import { PageContainer, Spinner, Table } from "../../components";
 import { api } from "../../services/api";
 import { queryClient } from "../../services/queryClient";
 
@@ -43,6 +43,25 @@ function Users() {
     if (shouldDelete) await deleteUser.mutateAsync(id);
   };
 
+  // <div className="relative overflow-x-auto">
+  //   <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+  //     <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+  //       <tr>
+  //         <th scope="col" className="px-4 py-3">
+  //           ID
+  //         </th>
+  //         <th scope="col" className="px-4 py-3">
+  //           Username
+  //         </th>
+  //         <th scope="col" className="px-4 py-3">
+  //           Email
+  //         </th>
+  //         <th scope="col" className="px-4 py-3" />
+  //       </tr>
+  //     </thead>
+  //   </table>
+  // </div>;
+
   return (
     <PageContainer
       title="Usuários"
@@ -61,58 +80,42 @@ function Users() {
         ) : error ? (
           <p className="font-semibold text-red-500">Error fetching users</p>
         ) : (
-          <div className="relative overflow-x-auto">
-            <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-              <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                <tr>
-                  <th scope="col" className="px-4 py-3">
-                    ID
-                  </th>
-                  <th scope="col" className="px-4 py-3">
-                    Username
-                  </th>
-                  <th scope="col" className="px-4 py-3">
-                    Email
-                  </th>
-                  <th scope="col" className="px-4 py-3" />
-                </tr>
-              </thead>
-              <tbody>
-                {data.map((user: User) => (
-                  <tr
-                    key={user.id}
-                    className="bg-white border-b dark:bg-gray-800 dark:border-gray-700"
+          <Table headers={["ID", "Username", "Email", ""]}>
+            <tbody>
+              {data.map((user: User) => (
+                <tr
+                  key={user.id}
+                  className="bg-white border-b dark:bg-gray-800 dark:border-gray-700"
+                >
+                  <td
+                    scope="row"
+                    className="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white"
                   >
-                    <td
-                      scope="row"
-                      className="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                    {user.id}
+                  </td>
+                  <td className="px-4 py-3">{user.username}</td>
+                  <td className="px-4 py-3">{user.email}</td>
+                  <td className="flex items-center justify-end px-4 py-3 ">
+                    <Link
+                      to={`${user.id}`}
+                      className="px-4 py-3 transition-colors duration-150 hover:text-indigo-600"
                     >
-                      {user.id}
-                    </td>
-                    <td className="px-4 py-3">{user.username}</td>
-                    <td className="px-4 py-3">{user.email}</td>
-                    <td className="flex justify-end">
-                      <Link
-                        to={`${user.id}`}
-                        className="px-6 py-4 transition-colors duration-150 hover:text-indigo-600"
-                      >
-                        <FaPencilAlt />
-                      </Link>
+                      <FaPencilAlt />
+                    </Link>
 
-                      <div
-                        className="px-6 py-4 transition-colors duration-150 cursor-pointer hover:text-red-600"
-                        onClick={() => {
-                          handleDelete(user.id);
-                        }}
-                      >
-                        <FaTrash />
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+                    <div
+                      className="px-4 py-3 transition-colors duration-150 cursor-pointer hover:text-red-600"
+                      onClick={() => {
+                        handleDelete(user.id);
+                      }}
+                    >
+                      <FaTrash />
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </Table>
         )}
       </div>
     </PageContainer>
