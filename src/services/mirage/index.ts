@@ -1,4 +1,4 @@
-import { createServer, Model } from "miragejs";
+import { ActiveModelSerializer, createServer, Model } from "miragejs";
 
 type User = {
   id: number;
@@ -9,6 +9,10 @@ type User = {
 
 export function makeServer() {
   const server = createServer({
+    serializers: {
+      application: ActiveModelSerializer,
+    },
+
     models: {
       user: Model.extend<Partial<User>>({}),
     },
@@ -24,10 +28,11 @@ export function makeServer() {
 
     routes() {
       this.namespace = "api";
-      this.get("/user");
-    },
+      this.timing = 750;
 
-    timing: 750,
+      this.get("/user");
+      this.post("/user");
+    },
   });
 
   return server;

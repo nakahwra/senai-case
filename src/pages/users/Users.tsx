@@ -1,7 +1,8 @@
-import { FaPencilAlt } from "react-icons/fa";
+import { FaPencilAlt, FaPlus } from "react-icons/fa";
 import { useQuery } from "react-query";
-import { Spinner } from "../components";
-import { api } from "../services/api";
+import { Link } from "react-router-dom";
+import { Spinner } from "../../components";
+import { api } from "../../services/api";
 
 type User = {
   id: number;
@@ -21,7 +22,16 @@ function Users() {
 
   return (
     <div className="max-w-screen-xl p-8 m-auto">
-      <h1 className="text-2xl font-semibold">Usuários</h1>
+      <div className="flex justify-between">
+        <h1 className="text-2xl font-semibold">Usuários</h1>
+        <Link
+          to={"/users/create"}
+          className="flex items-center px-4 py-2 transition-colors duration-150 bg-indigo-600 rounded-lg hover:bg-indigo-700"
+        >
+          <FaPlus size={14} />
+          <span className="ml-2 font-bold">Criar usuário</span>
+        </Link>
+      </div>
       <div
         className={`${
           (isLoading || error) && "flex justify-center items-center"

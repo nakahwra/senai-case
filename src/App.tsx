@@ -1,5 +1,5 @@
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import { Home, Users } from "./pages";
+import { EditUser, Home, Users } from "./pages";
 
 function App() {
   return (
@@ -8,6 +8,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/users" element={<Users />} />
+          <Route path="/users/create" element={<EditUser />} />
         </Routes>
       </Router>
     </div>
