@@ -85,10 +85,14 @@ function EditUser({ edit = false }: EditUserProps) {
 
   return (
     <div className="max-w-screen-xl p-8 m-auto">
-      <h1 className="text-2xl font-semibold">
+      <h1 className="text-2xl font-semibold min-h-[40px]">
         {edit ? `Editar usuário: ${id}` : "Criar usuário"}
       </h1>
-      <div className="bg-slate-800 rounded-xl min-h-[250px] mt-8 p-8">
+      <div
+        className={`${
+          isLoading && "flex items-center justify-center w-full h-full"
+        } bg-slate-800 rounded-xl min-h-[250px] mt-8 p-8`}
+      >
         {isLoading ? (
           <Spinner />
         ) : (

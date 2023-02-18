@@ -66,14 +66,17 @@ function Users() {
                   >
                     <td
                       scope="row"
-                      className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                      className="pl-6 font-medium text-gray-900 whitespace-nowrap dark:text-white"
                     >
                       {user.id}
                     </td>
-                    <td className="px-6 py-4">{user.username}</td>
-                    <td className="px-6 py-4">{user.email}</td>
-                    <td className="flex justify-end px-6 py-4">
-                      <Link to={`${user.id}`}>
+                    <td className="">{user.username}</td>
+                    <td className="">{user.email}</td>
+                    <td className="flex justify-end">
+                      <Link
+                        to={`${user.id}`}
+                        className="px-6 py-4 transition-colors duration-150 hover:text-indigo-600"
+                      >
                         <FaPencilAlt />
                       </Link>
                     </td>
