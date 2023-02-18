@@ -28,7 +28,7 @@ export function makeServer() {
 
     routes() {
       this.namespace = "api";
-      this.timing = 750;
+      this.timing = 300;
 
       this.get("/user");
       this.get("/user/:id");

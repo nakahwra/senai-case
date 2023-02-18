@@ -70,16 +70,16 @@ function Users() {
             <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
               <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                 <tr>
-                  <th scope="col" className="px-6 py-3">
+                  <th scope="col" className="px-4 py-3">
                     ID
                   </th>
-                  <th scope="col" className="px-6 py-3">
+                  <th scope="col" className="px-4 py-3">
                     Username
                   </th>
-                  <th scope="col" className="px-6 py-3">
+                  <th scope="col" className="px-4 py-3">
                     Email
                   </th>
-                  <th scope="col" className="px-6 py-3" />
+                  <th scope="col" className="px-4 py-3" />
                 </tr>
               </thead>
               <tbody>
@@ -90,12 +90,12 @@ function Users() {
                   >
                     <td
                       scope="row"
-                      className="pl-6 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                      className="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white"
                     >
                       {user.id}
                     </td>
-                    <td>{user.username}</td>
-                    <td>{user.email}</td>
+                    <td className="px-4 py-3">{user.username}</td>
+                    <td className="px-4 py-3">{user.email}</td>
                     <td className="flex justify-end">
                       <Link
                         to={`${user.id}`}
@@ -105,7 +105,7 @@ function Users() {
                       </Link>
 
                       <div
-                        className="px-6 py-4 transition-colors duration-150 cursor-pointer hover:text-indigo-600"
+                        className="px-6 py-4 transition-colors duration-150 cursor-pointer hover:text-red-600"
                         onClick={() => {
                           handleDelete(user.id);
                         }}
