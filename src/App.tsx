@@ -1,6 +1,13 @@
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { Navbar } from "./components";
-import { EditEnvironment, EditUser, Environments, Home, Users } from "./pages";
+import {
+  Dashboard,
+  EditEnvironment,
+  EditUser,
+  Environments,
+  Home,
+  Users,
+} from "./pages";
 
 function App() {
   return (
@@ -15,6 +22,7 @@ function App() {
           <Route path="/environments" element={<Environments />} />
           <Route path="/environments/create" element={<EditEnvironment />} />
           <Route path="/environments/:id" element={<EditEnvironment edit />} />
+          <Route path="/dashboard" element={<Dashboard />} />
         </Routes>
       </Router>
     </div>
