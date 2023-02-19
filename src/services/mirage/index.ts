@@ -1,5 +1,6 @@
-import { faker } from "@faker-js/faker";
+import { faker } from "@faker-js/faker/locale/pt_BR";
 import { ActiveModelSerializer, createServer, Factory, Model } from "miragejs";
+import { CLASSES, MAC_ADDRESSES } from "../../utils/faker";
 
 type User = {
   id: number;
@@ -40,14 +41,14 @@ export function makeServer() {
         id(i: number) {
           return i + 1000;
         },
-        username(i: number) {
-          return `João Ianky ${i + 1}`;
+        username() {
+          return faker.name.firstName();
         },
-        email(i: number) {
-          return `jp${i + 1}@email.com`;
+        email() {
+          return faker.internet.email();
         },
         password() {
-          return "123456";
+          return faker.internet.password(6);
         },
       }),
 
@@ -56,18 +57,13 @@ export function makeServer() {
           return i + 100;
         },
         name(i: number) {
-          return `Environment ${i + 1}`;
+          return `${faker.address.streetAddress()} - ${faker.address.cityName()}`;
         },
         macAddresses() {
-          return [
-            "b8:57:df:64:0b:41",
-            "0e:92:8d:f5:54:89",
-            "4e:f8:23:06:48:2b",
-            "16:c2:03:a0:16:9f",
-          ];
+          return faker.helpers.arrayElements(MAC_ADDRESSES);
         },
         classes() {
-          return ["Capacete", "Óculos", "Protetor auricular"];
+          return faker.helpers.arrayElements(CLASSES);
         },
       }),
 
@@ -79,10 +75,10 @@ export function makeServer() {
           return 100;
         },
         macAddress() {
-          return "b8:57:df:64:0b:41";
+          return faker.helpers.arrayElement(MAC_ADDRESSES);
         },
         class() {
-          return "Capacete";
+          return faker.helpers.arrayElement(CLASSES);
         },
         createdAt() {
           return faker.date.between("2018-01-01", "2022-12-31");
@@ -92,7 +88,7 @@ export function makeServer() {
 
     seeds(server) {
       server.createList("user", 5);
-      server.createList("monitoring", 2);
+      server.createList("monitoring", 4);
       server.createList("report", 500);
     },
 
