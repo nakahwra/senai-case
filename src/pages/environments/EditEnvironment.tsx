@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useMutation } from "react-query";
 import { useNavigate, useParams } from "react-router-dom";
 import { FormControl, PageContainer, Spinner } from "../../components";
@@ -7,50 +7,50 @@ import { queryClient } from "../../services/queryClient";
 import { handleFetch } from "../../utils/handleFetch";
 
 type InputType = {
-  username?: string;
-  email?: string;
-  password?: string;
+  name?: string;
+  mac_addresses?: string;
+  classes?: string;
 };
 
-type UserFormData = {
+type EnvironmentFormData = {
   id?: number;
-  username: string;
-  email: string;
-  password: string;
+  name: string;
+  mac_addresses: string[];
+  classes: string[];
 };
 
 interface EditUserProps {
   edit?: boolean;
 }
 
-function EditUser({ edit = false }: EditUserProps) {
+function EditEnvironment({ edit = false }: EditUserProps) {
   const { id } = useParams();
 
   const navigate = useNavigate();
 
-  let data: UserFormData | null = null,
+  let data: EnvironmentFormData | null = null,
     isLoading;
 
   if (edit && id) {
-    const user = handleFetch(id, navigate, "user", "users");
+    const monitoring = handleFetch(id, navigate, "monitoring", "monitorings");
 
-    data = user.data;
-    isLoading = user.isLoading;
+    data = monitoring.data;
+    isLoading = monitoring.isLoading;
   }
 
-  const createUser = useMutation(
-    async (user: UserFormData) => {
-      if (edit && id) user = { ...user, id: Number(id) };
+  const createMonitoring = useMutation(
+    async (monitoring: EnvironmentFormData) => {
+      if (edit && id) monitoring = { ...monitoring, id: Number(id) };
 
-      const response = await api.post("/user", {
-        user: {
-          ...user,
+      const response = await api.post("/monitoring", {
+        monitoring: {
+          ...monitoring,
         },
       });
     },
     {
       onSuccess: () => {
-        queryClient.invalidateQueries("users");
+        queryClient.invalidateQueries("monitoring");
       },
     }
   );
@@ -59,13 +59,21 @@ function EditUser({ edit = false }: EditUserProps) {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
+
     setInputs((inputs) => ({ ...inputs, [name]: value }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await createUser.mutateAsync(inputs as UserFormData);
-    navigate("/users");
+
+    const formatted = {
+      name: inputs.name,
+      mac_addresses: inputs.mac_addresses?.split(",").map((mac) => mac.trim()),
+      classes: inputs.classes?.split(",").map((classes) => classes.trim()),
+    };
+
+    await createMonitoring.mutateAsync(formatted as EnvironmentFormData);
+    navigate("/environments");
   };
 
   useEffect(() => {
@@ -75,14 +83,17 @@ function EditUser({ edit = false }: EditUserProps) {
       filtered.forEach((key) => {
         setInputs((inputs) => ({
           ...inputs,
-          [key]: data![key as keyof typeof data] as string[],
+          [key]:
+            key !== "name"
+              ? (data![key as keyof typeof data] as string[]).join(", ")
+              : data![key],
         }));
       });
     }
   }, [data]);
 
   return (
-    <PageContainer title={edit ? `Editar usuário: ${id}` : "Criar usuário"}>
+    <PageContainer title={edit ? `Editar ambiente: ${id}` : "Criar ambiente"}>
       <div
         className={`${
           isLoading && "flex items-center justify-center w-full h-full"
@@ -94,30 +105,29 @@ function EditUser({ edit = false }: EditUserProps) {
           <form className="space-y-4" onSubmit={handleSubmit}>
             <div className="flex flex-col items-end justify-between space-y-4 sm:flex-row sm:space-x-4 sm:space-y-0">
               <FormControl
-                label="Nome de usuário"
-                name="username"
+                label="Nome"
+                name="name"
                 inputType="text"
-                value={inputs.username || ""}
+                value={inputs.name || ""}
                 onChange={handleChange}
                 required
               />
               <FormControl
-                label="E-mail"
-                name="email"
-                inputType="email"
-                value={inputs.email || ""}
+                label="Endereços MAC"
+                name="mac_addresses"
+                inputType="text"
+                value={inputs.mac_addresses || ""}
                 onChange={handleChange}
                 required
               />
             </div>
             <FormControl
-              label="Senha"
-              name="password"
-              inputType="password"
-              value={inputs.password || ""}
+              label="Classes"
+              name="classes"
+              inputType="text"
+              value={inputs.classes || ""}
               onChange={handleChange}
               required
-              min={6}
             />
             <input
               className="mt-8 w-full px-4 py-2 bg-indigo-600 font-semibold transition-colors duration-150 hover:bg-indigo-700 rounded-md sm:max-w-[150px] cursor-pointer"
@@ -131,4 +141,4 @@ function EditUser({ edit = false }: EditUserProps) {
   );
 }
 
-export default EditUser;
+export default EditEnvironment;
