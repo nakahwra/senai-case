@@ -14,6 +14,7 @@ function App() {
           <Route path="/users/:id" element={<EditUser edit />} />
           <Route path="/environments" element={<Environments />} />
           <Route path="/environments/create" element={<EditEnvironment />} />
+          <Route path="/environments/:id" element={<EditEnvironment edit />} />
         </Routes>
       </Router>
     </div>

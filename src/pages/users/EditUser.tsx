@@ -77,7 +77,7 @@ function EditUser({ edit = false }: EditUserProps) {
     if (data) {
       const filtered = Object.keys(data).filter((key) => key !== "id");
 
-      Object.keys(data).forEach((key) => {
+      filtered.forEach((key) => {
         setInputs((inputs) => ({ ...inputs, [key]: data[key] }));
       });
     }
