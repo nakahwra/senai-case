@@ -21,12 +21,10 @@ const NavItem = ({ icon, title, path }: NavItemProps) => {
 
 function Navbar() {
   return (
-    <nav className="z-10 left-0 transition-all duration-300 fixed flex flex-col h-screen w-[64px] overflow-hidden bg-slate-800 hover:w-[200px] pt-3.5">
-      <NavItem icon={<FaUser />} title="Usuários" path="/users" />
-
+    <nav className="z-10 left-0 transition-all duration-300 fixed flex flex-col h-screen w-[64px] overflow-hidden bg-slate-900 border-r-2 border-slate-800 hover:w-[200px] pt-3.5 drop-shadow-2xl">
+      <NavItem icon={<FaChartBar />} title="Dashboard" path="/" />
       <NavItem icon={<FaCity />} title="Ambientes" path="/environments" />
-
-      <NavItem icon={<FaChartBar />} title="Dashboard" path="/dashboard" />
+      <NavItem icon={<FaUser />} title="Usuários" path="/users" />
     </nav>
   );
 }
