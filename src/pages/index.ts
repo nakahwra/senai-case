@@ -1,3 +1,4 @@
+export { default as Dashboard } from "./Dashboard";
 export { default as EditEnvironment } from "./environments/EditEnvironment";
 export { default as Environments } from "./environments/Environments";
 export { default as Home } from "./Home";
