@@ -14,7 +14,7 @@ type Environment = {
 };
 
 function Environments() {
-  const { data, isLoading, error } = useQuery("monitoring", async () => {
+  const { data, isLoading, error } = useQuery("monitorings", async () => {
     try {
       const { data } = await api.get("/monitoring");
       return data.monitorings;

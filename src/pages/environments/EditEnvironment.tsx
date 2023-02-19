@@ -1,10 +1,10 @@
-import { AxiosError } from "axios";
 import { useEffect, useState } from "react";
-import { useMutation, useQuery } from "react-query";
+import { useMutation } from "react-query";
 import { useNavigate, useParams } from "react-router-dom";
 import { FormControl, Spinner } from "../../components";
 import { api } from "../../services/api";
 import { queryClient } from "../../services/queryClient";
+import { handleFetch } from "../../utils/handleFetch";
 
 type InputType = {
   name?: string;
@@ -28,25 +28,17 @@ function EditEnvironment({ edit = false }: EditUserProps) {
 
   const navigate = useNavigate();
 
-  const { data, isLoading } = useQuery(
-    "monitoring",
-    async () => {
-      if (!edit) return;
-      try {
-        const { data } = await api.get(`/monitoring/${id}`);
-        return data.monitoring;
-      } catch (err) {
-        const { response } = err as AxiosError;
+  let data: EnvironmentFormData | null = null,
+    isLoading;
 
-        if (response?.status === 404) {
-          navigate("/monitoring");
-        }
-      }
-    },
-    { cacheTime: 0 }
-  );
+  if (edit && id) {
+    const monitoring = handleFetch(id, navigate, "monitoring", "monitorings");
 
-  const createUser = useMutation(
+    data = monitoring.data;
+    isLoading = monitoring.isLoading;
+  }
+
+  const createMonitoring = useMutation(
     async (monitoring: EnvironmentFormData) => {
       if (edit && id) monitoring = { ...monitoring, id: Number(id) };
 
@@ -80,7 +72,7 @@ function EditEnvironment({ edit = false }: EditUserProps) {
       classes: inputs.classes?.split(",").map((classes) => classes.trim()),
     };
 
-    await createUser.mutateAsync(formatted as EnvironmentFormData);
+    await createMonitoring.mutateAsync(formatted as EnvironmentFormData);
     navigate("/environments");
   };
 
@@ -91,7 +83,10 @@ function EditEnvironment({ edit = false }: EditUserProps) {
       filtered.forEach((key) => {
         setInputs((inputs) => ({
           ...inputs,
-          [key]: key !== "name" ? data[key].join(", ") : data[key],
+          [key]:
+            key !== "name"
+              ? (data![key as keyof typeof data] as string[]).join(", ")
+              : data![key],
         }));
       });
     }

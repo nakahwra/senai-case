@@ -1,10 +1,10 @@
-import { AxiosError } from "axios";
 import React, { useEffect, useState } from "react";
-import { useMutation, useQuery } from "react-query";
+import { useMutation } from "react-query";
 import { useNavigate, useParams } from "react-router-dom";
 import { FormControl, PageContainer, Spinner } from "../../components";
 import { api } from "../../services/api";
 import { queryClient } from "../../services/queryClient";
+import { handleFetch } from "../../utils/handleFetch";
 
 type InputType = {
   username?: string;
@@ -13,6 +13,7 @@ type InputType = {
 };
 
 type UserFormData = {
+  id?: number;
   username: string;
   email: string;
   password: string;
@@ -27,26 +28,20 @@ function EditUser({ edit = false }: EditUserProps) {
 
   const navigate = useNavigate();
 
-  const { data, isLoading, error } = useQuery(
-    "user",
-    async () => {
-      if (!edit) return;
-      try {
-        const { data } = await api.get(`/user/${id}`);
-        return data.user;
-      } catch (err) {
-        const { response } = err as AxiosError;
+  let data: UserFormData | null = null,
+    isLoading;
 
-        if (response?.status === 404) {
-          navigate("/users");
-        }
-      }
-    },
-    { cacheTime: 0 }
-  );
+  if (edit && id) {
+    const user = handleFetch(id, navigate, "user", "users");
+
+    data = user.data;
+    isLoading = user.isLoading;
+  }
 
   const createUser = useMutation(
     async (user: UserFormData) => {
+      if (edit && id) user = { ...user, id: Number(id) };
+
       const response = await api.post("/user", {
         user: {
           ...user,
@@ -78,7 +73,10 @@ function EditUser({ edit = false }: EditUserProps) {
       const filtered = Object.keys(data).filter((key) => key !== "id");
 
       filtered.forEach((key) => {
-        setInputs((inputs) => ({ ...inputs, [key]: data[key] }));
+        setInputs((inputs) => ({
+          ...inputs,
+          [key]: data![key as keyof typeof data] as string[],
+        }));
       });
     }
   }, [data]);
