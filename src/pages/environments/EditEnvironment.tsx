@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useMutation } from "react-query";
 import { useNavigate, useParams } from "react-router-dom";
-import { FormControl, Spinner } from "../../components";
+import { FormControl, PageContainer, Spinner } from "../../components";
 import { api } from "../../services/api";
 import { queryClient } from "../../services/queryClient";
 import { handleFetch } from "../../utils/handleFetch";
@@ -93,8 +93,7 @@ function EditEnvironment({ edit = false }: EditUserProps) {
   }, [data]);
 
   return (
-    <div className="max-w-screen-xl p-8 m-auto">
-      <h1 className="text-2xl font-semibold">Criar usuário</h1>
+    <PageContainer title={edit ? `Editar ambiente: ${id}` : "Criar ambiente"}>
       <div
         className={`${
           isLoading && "flex items-center justify-center w-full h-full"
@@ -138,7 +137,7 @@ function EditEnvironment({ edit = false }: EditUserProps) {
           </form>
         )}
       </div>
-    </div>
+    </PageContainer>
   );
 }
 
